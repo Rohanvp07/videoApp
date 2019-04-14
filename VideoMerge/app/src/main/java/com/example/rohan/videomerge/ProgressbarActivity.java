@@ -19,7 +19,7 @@ public class ProgressbarActivity extends AppCompatActivity {
     private CircleProgressBar circleProgressBar;
     private String[] command;
     private String path;
-
+    private int duration;
     ServiceConnection serviceConnection;
     ffmpegservice mpegservice;
     Integer res;
@@ -33,12 +33,12 @@ public class ProgressbarActivity extends AppCompatActivity {
         circleProgressBar.setMax(100);
 
         final Intent i=getIntent();
-
+        duration=i.getIntExtra("duration",0);
         command=i.getStringArrayExtra("command");
         path=i.getStringExtra("destination");
 
         final Intent intent=new Intent(ProgressbarActivity.this,ffmpegservice.class);
-
+        intent.putExtra("duration",String.valueOf(duration));
         intent.putExtra("command",command);
         intent.putExtra("destination",path);
         startService(intent);

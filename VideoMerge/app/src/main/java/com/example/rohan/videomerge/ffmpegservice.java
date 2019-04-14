@@ -37,7 +37,7 @@ public class ffmpegservice extends Service
 
         if (intent!=null)
         {
-
+            duration= Integer.parseInt(intent.getStringExtra("duration"));
             command=intent.getStringArrayExtra("command");
             try {
                 loadffmpegbinary();

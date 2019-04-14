@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private String originalpath1,originalpath2,fileprefix,fileext;
     private File dest;
     private String[] command;
+    private int d1,d2,duration;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
                 originalpath1=getRealPathfromuri(getApplicationContext(),uri1);
                 originalpath2=getRealPathfromuri(getApplicationContext(),uri2);
-
 
                 Bitmap bitmap=ThumbnailUtils.createVideoThumbnail(originalpath1,MediaStore.Video.Thumbnails.MINI_KIND);
 
@@ -127,6 +128,17 @@ public class MainActivity extends AppCompatActivity {
                         fileprefix=newvideoname.getText().toString();
 
 
+
+                        MediaPlayer mp1 = MediaPlayer.create(MainActivity.this,uri1);
+                        d1= mp1.getDuration();
+                        mp1.release();
+
+                        MediaPlayer mp2 = MediaPlayer.create(MainActivity.this,uri2);
+                        d2= mp2.getDuration();
+                        mp2.release();
+
+                        duration=(d1+d2)/1000;
+
                         File folder=new File(Environment.getExternalStorageDirectory()+"/VideoMerge");
                         if(!folder.exists())
                         {
@@ -143,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Intent intent=new Intent(MainActivity.this,ProgressbarActivity.class);
                         intent.putExtra("command",command);
+                        intent.putExtra("duration",duration);
                         intent.putExtra("destination",dest.getAbsolutePath());
                         startActivity(intent);
                         finish();
